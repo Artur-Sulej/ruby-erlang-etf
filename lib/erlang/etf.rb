@@ -20,6 +20,7 @@ require 'erlang/etf/map'
 require 'erlang/etf/new_float'
 require 'erlang/etf/new_fun'
 require 'erlang/etf/new_reference'
+require 'erlang/etf/newer_reference'
 require 'erlang/etf/nil'
 require 'erlang/etf/pid'
 require 'erlang/etf/port'
@@ -51,6 +52,7 @@ module Erlang
       [ Erlang::ETF::Term::SMALL_BIG_EXT,       Erlang::ETF::SmallBig      ],
       [ Erlang::ETF::Term::LARGE_BIG_EXT,       Erlang::ETF::LargeBig      ],
       [ Erlang::ETF::Term::NEW_REFERENCE_EXT,   Erlang::ETF::NewReference  ],
+      [ Erlang::ETF::Term::NEWER_REFERENCE_EXT, Erlang::ETF::NewerReference],
       [ Erlang::ETF::Term::SMALL_ATOM_EXT,      Erlang::ETF::SmallAtom     ],
       [ Erlang::ETF::Term::FUN_EXT,             Erlang::ETF::Fun           ],
       [ Erlang::ETF::Term::NEW_FUN_EXT,         Erlang::ETF::NewFun        ],
@@ -89,6 +91,7 @@ module Erlang
       [ :new_float,       Erlang::ETF::NewFloat      ],
       [ :new_fun,         Erlang::ETF::NewFun        ],
       [ :new_reference,   Erlang::ETF::NewReference  ],
+      [ :newer_reference, Erlang::ETF::NewerReference],
       [ :nil,             Erlang::ETF::Nil           ],
       [ :pid,             Erlang::ETF::Pid           ],
       [ :port,            Erlang::ETF::Port          ],
@@ -191,6 +194,12 @@ module Erlang
       return false
     end
 
+    def self.is_newer_reference(term)
+      return true if term.kind_of?(TYPE[:newer_reference])
+      return true if Erlang.is_reference(term) and term.newer_reference?
+      return false
+    end
+
     def self.is_nil(term)
       return true if term.kind_of?(TYPE[:nil])
       return true if Erlang.is_list(term) and term.empty?
@@ -211,7 +220,7 @@ module Erlang
 
     def self.is_reference(term)
       return true if term.kind_of?(TYPE[:reference])
-      return true if Erlang.is_reference(term) and not term.new_reference?
+      return true if Erlang.is_reference(term) and not term.new_reference? and not term.newer_reference?
       return false
     end
 
@@ -356,6 +365,7 @@ module Erlang
     return :map             if Erlang::ETF.is_map(term)
     return :new_float       if Erlang::ETF.is_new_float(term)
     return :new_fun         if Erlang::ETF.is_new_fun(term)
+    return :newer_reference if Erlang::ETF.is_newer_reference(term)
     return :new_reference   if Erlang::ETF.is_new_reference(term)
     return :nil             if Erlang::ETF.is_nil(term)
     return :pid             if Erlang::ETF.is_pid(term)
