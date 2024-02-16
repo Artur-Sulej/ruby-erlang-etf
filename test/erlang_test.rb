@@ -64,7 +64,7 @@ class ErlangTest < Minitest::Test
     # EXPORT_EXT
     Erlang::Export[:erlang, :now, 0],
     # FLOAT_EXT
-    BigDecimal.new('1'),
+    BigDecimal('1'),
     # FUN_EXT
     Erlang::Function[
       pid: Erlang::Pid[:"nonode@nohost", 38, 0, 0],

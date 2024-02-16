@@ -50,7 +50,7 @@ class Rantly
       integer = range(0, 9)
       fractional = Array.new(20); 20.times { |i| fractional[i] = range(0, 9) }
       float_string = "#{sign}#{integer}.#{fractional.join}e#{(e >= 0) ? '+' : ''}#{e}"
-      float_object = ::BigDecimal.new(::BigDecimal.new(float_string).to_s).to_f
+      float_object = BigDecimal(BigDecimal(float_string).to_s).to_f
     end
     float = Erlang::Float[float_string, old: true]
     return Erlang::ETF::Float[float] if strict == false
@@ -140,7 +140,7 @@ class Rantly
       integer = range(0, 9)
       fractional = Array.new(20); 20.times { |i| fractional[i] = range(0, 9) }
       float_string = "#{sign}#{integer}.#{fractional.join}e#{(e >= 0) ? '+' : ''}#{e}"
-      float_object = ::BigDecimal.new(::BigDecimal.new(float_string).to_s).to_f
+      float_object = BigDecimal(BigDecimal(float_string).to_s).to_f
     end
     float = Erlang::Float[float_string]
     return Erlang::ETF::NewFloat[float]
@@ -268,7 +268,7 @@ class Rantly
   #   integer = range(0, 9)
   #   fractional = Array.new(20); 20.times { |i| fractional[i] = range(0, 9) }
   #   float_string = "#{sign}#{integer}.#{fractional.join}e#{(e >= 0) ? '+' : ''}#{e}"
-  #   big_decimal = BigDecimal.new(float_string)
+  #   big_decimal = BigDecimal(float_string)
   #   float = big_decimal.to_f
   #   return gen_new_float if float == infinity or float == -infinity
   #   return Erlang::ETF::NewFloat[float]
